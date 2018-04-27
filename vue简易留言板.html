@@ -7,64 +7,116 @@
         <script src="js/jquery-1.11.1.min.js"></script>
         <script src="css/bootstrap-3.3.7/js/bootstrap.min.js"></script>
         <script src="js/vue.min-v2.5.16.js"></script>
+        <script>
+            window.onload = function(){
+                new Vue({
+                    el: "#app",
+                    data: {
+                        myData: [],
+                        username: "",
+                        age: "",
+                        nowIndex: -1 // 用于记录当前要删除的是哪行数据，初始值必须小于0
+                    },
+                    methods: {
+                        add: function(){
+                            if($.trim(this.username) !== "" && $.trim(this.age) !== ""){
+                                this.myData.push({
+                                    name: this.username,
+                                    age: this.age
+                                });
+                            }else{
+                                alert("用户名或年龄不能为空！");
+                            }
+                            this.username = "";
+                            this.age = "";
+                        },
+                        reset: function(){
+                            this.username = "";
+                            this.age = "";
+                        },
+                        deleteMsg: function(n){ // 不能使用delete作为方法名，否则会报莫名的错
+                            if(n === -2){ // nowIndex===-2 时删除数组全部元素
+                                this.myData = [];
+                            }else{
+                                /* splice(index,len,[item]) 注释：该方法会改变原始数组。
+                                splice有3个参数，它也可以用来替换/删除/添加数组内某一个或者几个值
+                                index:数组开始下标 len: 替换/删除的长度 item:替换的值，删除操作的话 item为空 */
+                                this.myData.splice(n, 1); // 删除数组指定位置的一个元素
+                            }
+                        }
+                    }
+                });
+            };
+        </script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="app">
         <form role="form">
             <div class="form-group">
                 <label for="username">用户名：</label>
-                <input type="text" id="username" class="form-control" placeholder="请输入用户名">
+                <input type="text" id="username" class="form-control" v-model="username" placeholder="请输入用户名">
             </div>
             <div class="form-group">
                 <label for="age">年龄：</label>
-                <input type="text" id="age" class="form-control" placeholder="请输入年龄">
+                <input type="text" id="age" class="form-control" v-model="age" placeholder="请输入年龄">
             </div>
             <div class="form-group">
-                <input type="button" value="添加" class="btn btn-primary">
-                <input type="button" value="重置" class="btn btn-danger">
+                <input type="button" value="添加" class="btn btn-primary" v-on:click="add()">
+                <input type="button" value="重置" class="btn btn-default" v-on:click="reset()">
             </div>
         </form>
         <hr />
         <table class="table table-bordered table-hover">
-            <caption class="h3 text-info">用户信息表</caption>
+            <caption class="h3 text-info text-center">用户信息表</caption>
             <tr class="text-success">
                 <th class="text-center">序号</th>
                 <th class="text-center">姓名</th>
                 <th class="text-center">年龄</th>
                 <th class="text-center">操作</th>
             </tr>
-            <tr class="text-center">
-                <td>1</td>
-                <td>张三</td>
-                <td>19</td>
+            <tr class="text-center" v-for="(value, index) in myData">
+                <td>{{index+1}}</td>
+                <!-- (value, index) in arr(数组) -->
+                <!-- <td>{{value.name}}</td>
+                <td>{{value.age}}</td> -->
+                <!-- (val, key) in obj(对象) 或者 (value, key, index) in obj(对象) -->
+                <td v-for="(val, key, idx) in value">({{idx}}:{{key}}){{val}}</td>
                 <td>
+                    <!-- nowIndex赋值为当前循环的index -->
                     <button class="btn btn-info btn-sm" data-toggle="modal" 
-                        data-target="#delLayer">删除</button>
+                        data-target="#delLayer" v-on:click="nowIndex=index">删除</button>
                 </td>
             </tr>
-            <tr class="text-center">
-                <td>2</td>
-                <td>李四</td>
-                <td>16</td>
-                <td>
-                    <button class="btn btn-info btn-sm">删除</button>
-                </td>
-            </tr>
-            <tr>
+            <tr v-show="myData.length!=0">
                 <td colspan="4" class="text-right">
-                    <button class="btn btn-danger btn-sm">全部删除</button>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" 
+                        data-target="#delLayer" v-on:click="nowIndex=-2">全部删除</button>
                 </td>
             </tr>
-            <tr>
-                <td colspan="4" class="h4 text-center bg-warning">
+            <tr v-show="myData.length==0">
+                <td colspan="4" class="text-center bg-warning">
                     暂无数据......
                 </td>
             </tr>
         </table>
 
-        <!-- 模态框 -->
-        <div id="delLayer" role="dialog" class="modal">
-
+        <!-- 模态框,fade是bootstrap中的动画效果 -->
+        <div id="delLayer" role="dialog" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <h4 class="modal-title">确认删除吗？</h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button class="btn btn-primary" data-dismiss="modal" 
+                            v-on:click="deleteMsg(nowIndex)">确认</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
