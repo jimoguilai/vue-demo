@@ -209,7 +209,7 @@ vue2.x版本v-for的key和index获取，跟vue1.x有所区别，查看
     :style="[a,b]" // json数组
     ```
 
-- 模板：数据绑定
+- 数据绑定：
 
     ```js
     1. v-model，双向绑定；
