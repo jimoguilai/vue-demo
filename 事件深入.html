@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>Vue事件深入</title>
+    <script src="js/vue.min-v2.5.16.js"></script>
+    <script>
+        window.onload = function(){
+            new Vue({
+                el: "#app",
+                data: {
+
+                },
+                methods: {
+                    show: function(e, a, b){
+                        // e为$event，原生js的事件对象，可以.出很多属性
+                        alert(e.clientX);
+                        alert(a);
+                        alert(b);
+                    },
+                    show2: function(){
+                        alert('show2');
+                    },
+                    show3: function(){
+                        alert('show3');
+                    },
+                    showStop: function(e){
+                        e.cancelBubble = true;
+                        alert('事件冒泡被e.cancelBubble = true;阻止了');
+                    },
+                    show4: function(e){
+                        e.preventDefault(); // 阻止事件的默认行为
+                        alert('show4');
+                    },
+                    show5: function(e){
+                        alert(e.keyCode); // 测试时需将输入法切换为英文输入法
+                        if(e.keyCode === 13){
+                            alert('您按了回车键，keyCode=13');
+                        }
+                    }
+
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="点击" v-on:click="show($event, 12, 'hello')">
+        <!-- 事件的简写：@事件名称 -->
+        <input type="button" value="点击传递$event参数" @click="show($event, 12, 'hello')">
+        <hr>
+        事件冒泡：点击show2会触发show3事件；我们需要阻止事件冒泡的发生。
+        <div @click="show3()">
+            <input type="button" value="事件冒泡" @click="show2()">
+            <br>
+            该按钮阻止事件冒泡的发生：e.cancelBubble = true;
+            <input type="button" value="阻止事件冒泡" @click="showStop($event)">
+            <br>
+            或者：@click.stop
+            <input type="button" value="阻止事件冒泡2" @click.stop="show2()">
+        </di>
+
+        <hr>
+        默认行为（默认事件）:
+        <input type="button" value="鼠标右键的默认行为" @contextmenu="show2()">
+        <br>
+        阻止默认行为1：e.preventDefault()
+        <input type="button" value="阻止鼠标右键的默认行为1" @contextmenu="show4($event)">
+        <br>
+        阻止默认行为1：@contextmenu.prevent
+        <input type="button" value="阻止鼠标右键的默认行为2" @contextmenu.prevent="show2()">
+    </div>
+    <hr>
+    键盘事件：测试时需将输入法切换为英文输入法<br>
+    <input type="text" @keydown="show5($event)">
+    <br>
+    常用键：如 回车keyCode=13=enter，只有按回车时触发事件<br>
+    @keydown.13<input type="text" @keydown.13="show2()"><br>
+    @keydown.enter<input type="text" @keydown.enter="show2()"><br>
+    @keydown.h<input type="text" @keydown.h="show2()"><br>
+    @keydown.1(数字必须使用keycode，1的keycode=49)<input type="text" @keydown.49="show2()">
+</body>
+</html>

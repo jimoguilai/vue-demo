@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>属性v-bind:</title>
+    <script src="js/vue.min-v2.5.16.js"></script>
+    <style>
+    .red{
+        color: red;
+    }
+    .blue{
+        background: blue;
+    }
+    </style>
+    <script>
+        window.onload = function(){
+            new Vue({
+                el: "#app",
+                data: {
+                    url: "http://i1.sinaimg.cn/dy/deco/2013/0329/logo/LOGO_1x.png",
+                    w: "200px",
+                    red: "red",
+                    b: "blue",
+                    json: {
+                        red: true,
+                        blue: false
+                    },
+                    a1: {
+                        color: "red",
+                        fontSize: "25px"
+                    },
+                    b1: {
+                        backgroundColor: "blue"
+                    }
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="app">
+        <img src="{{url}}" alt="" >
+        <br>
+        v-bind:src=""
+        <img v-bind:src="url" alt="">
+        <br>
+        简写   :src=""
+        <img :src="url" :width="w" alt="" >
+
+        <hr>
+        1.class属性用法：<br>
+        <strong :class="[red,b]">这是文字</strong><br>
+        <strong :class="{red:true, blue:true}">这是文字</strong><br>
+        <strong :class="json">这是文字</strong><br>
+        2.style属性用法：<br>
+        <strong :style="a1">这是文字</strong><br>
+        <strong :style="[a1,b1]">这是文字</strong><br>
+    </div>
+</body>
+</html>

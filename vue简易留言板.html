@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-        <title>Vue简易留言板</title>
-        <link rel="stylesheet" href="css/bootstrap-3.3.7/css/bootstrap.min.css">
-        <script src="js/jquery-1.11.1.min.js"></script>
-        <script src="css/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-        <script src="js/vue.min-v2.5.16.js"></script>
-        <script>
-            window.onload = function(){
-                new Vue({
-                    el: "#app",
-                    data: {
-                        myData: [],
-                        username: "",
-                        age: "",
-                        nowIndex: -1 // 用于记录当前要删除的是哪行数据，初始值必须小于0
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>Vue简易留言板</title>
+    <link rel="stylesheet" href="css/bootstrap-3.3.7/css/bootstrap.min.css">
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="css/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/vue.min-v2.5.16.js"></script>
+    <script>
+        window.onload = function(){
+            new Vue({
+                el: "#app",
+                data: {
+                    myData: [],
+                    username: "",
+                    age: "",
+                    nowIndex: -1 // 用于记录当前要删除的是哪行数据，初始值必须小于0
+                },
+                methods: {
+                    add: function(){
+                        if($.trim(this.username) !== "" && $.trim(this.age) !== ""){
+                            this.myData.push({
+                                name: this.username,
+                                age: this.age
+                            });
+                        }else{
+                            alert("用户名或年龄不能为空！");
+                        }
+                        this.username = "";
+                        this.age = "";
                     },
-                    methods: {
-                        add: function(){
-                            if($.trim(this.username) !== "" && $.trim(this.age) !== ""){
-                                this.myData.push({
-                                    name: this.username,
-                                    age: this.age
-                                });
-                            }else{
-                                alert("用户名或年龄不能为空！");
-                            }
-                            this.username = "";
-                            this.age = "";
-                        },
-                        reset: function(){
-                            this.username = "";
-                            this.age = "";
-                        },
-                        deleteMsg: function(n){ // 不能使用delete作为方法名，否则会报莫名的错
-                            if(n === -2){ // nowIndex===-2 时删除数组全部元素
-                                this.myData = [];
-                            }else{
-                                /* splice(index,len,[item]) 注释：该方法会改变原始数组。
-                                splice有3个参数，它也可以用来替换/删除/添加数组内某一个或者几个值
-                                index:数组开始下标 len: 替换/删除的长度 item:替换的值，删除操作的话 item为空 */
-                                this.myData.splice(n, 1); // 删除数组指定位置的一个元素
-                            }
+                    reset: function(){
+                        this.username = "";
+                        this.age = "";
+                    },
+                    deleteMsg: function(n){ // 不能使用delete作为方法名，否则会报莫名的错
+                        if(n === -2){ // nowIndex===-2 时删除数组全部元素
+                            this.myData = [];
+                        }else{
+                            /* splice(index,len,[item]) 注释：该方法会改变原始数组。
+                            splice有3个参数，它也可以用来替换/删除/添加数组内某一个或者几个值
+                            index:数组开始下标 len: 替换/删除的长度 item:替换的值，删除操作的话 item为空 */
+                            this.myData.splice(n, 1); // 删除数组指定位置的一个元素
                         }
                     }
-                });
-            };
-        </script>
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     <div class="container" id="app">

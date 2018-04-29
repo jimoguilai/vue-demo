@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>数据绑定</title>
+    <script src="js/vue.min-v2.5.16.js"></script>
+    <script>
+        window.onload = function(){
+            new Vue({
+                el: "#app",
+                data: {
+                    msg: "aa",
+                    lower: "abc",
+                    upper: "ABCdE"
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="msg"><br>
+        v-model，双向绑定: <span>{{msg}}</span><br>
+        v-once，一次性绑定: <span v-once>{{msg}}</span><br>
+        v-html，html不转义直接输出: <span v-html="msg"></span>
+
+        <hr>
+        过滤器：<br>
+        小写转大写：{{lower.toUpperCase()}}<br>
+        大写转小写：{{upper.toLowerCase()}}<br>
+        首字母大写：{{"abcd"[0].toUpperCase()+"abcd".slice(1)}}
+    </div>
+</body>
+</html>
